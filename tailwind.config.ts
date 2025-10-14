@@ -23,10 +23,13 @@ export default {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
           hover: "hsl(var(--primary-hover))",
+          active: "hsl(var(--primary-active))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
+          hover: "hsl(var(--secondary-hover))",
+          active: "hsl(var(--secondary-active))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -39,6 +42,7 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          hover: "hsl(var(--accent-hover))",
         },
         success: {
           DEFAULT: "hsl(var(--success))",
@@ -75,17 +79,27 @@ export default {
         },
       },
       boxShadow: {
+        xs: "var(--shadow-xs)",
+        sm: "var(--shadow-sm)",
         card: "var(--shadow-card)",
         elevated: "var(--shadow-elevated)",
+        lg: "var(--shadow-lg)",
       },
       backgroundImage: {
         "gradient-primary": "var(--gradient-primary)",
+        "gradient-secondary": "var(--gradient-secondary)",
         "gradient-accent": "var(--gradient-accent)",
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "var(--radius-lg)",
+        DEFAULT: "var(--radius)",
+        md: "var(--radius)",
+        sm: "var(--radius-sm)",
+      },
+      transitionDuration: {
+        fast: "var(--transition-fast)",
+        base: "var(--transition-base)",
+        slow: "var(--transition-slow)",
       },
       keyframes: {
         "accordion-down": {
