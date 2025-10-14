@@ -8,6 +8,7 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import WorkOrders from "./pages/WorkOrders";
+import NewWorkOrder from "./pages/NewWorkOrder";
 import Equipment from "./pages/Equipment";
 import Inventory from "./pages/Inventory";
 import NotFound from "./pages/NotFound";
@@ -39,6 +40,7 @@ const App = () => (
             >
               <Route index element={<Dashboard />} />
               <Route path="work-orders" element={<WorkOrders />} />
+              <Route path="work-orders/new" element={<NewWorkOrder />} />
               <Route path="assignment" element={<Dashboard />} />
               <Route path="inventory" element={<Inventory />} />
               <Route path="equipment" element={<Equipment />} />
