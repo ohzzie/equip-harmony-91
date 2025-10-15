@@ -21,10 +21,10 @@ import {
   User,
   LogOut,
   Menu,
-  Bell,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import { NotificationCenter } from '@/components/NotificationCenter';
 
 const NAV_ITEMS = [
   { icon: Home, label: 'Home', path: '/' },
@@ -87,10 +87,7 @@ export function AppLayout() {
             <Button variant="ghost" size="icon">
               <Search className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-destructive" />
-            </Button>
+            <NotificationCenter />
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
