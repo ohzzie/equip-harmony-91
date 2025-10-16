@@ -12,6 +12,7 @@ import WorkOrderDetail from "./pages/WorkOrderDetail";
 import NewWorkOrder from "./pages/NewWorkOrder";
 import AssignmentBoard from "./pages/AssignmentBoard";
 import Equipment from "./pages/Equipment";
+import EquipmentDetail from "./pages/EquipmentDetail";
 import Inventory from "./pages/Inventory";
 import NotFound from "./pages/NotFound";
 
@@ -47,6 +48,7 @@ const App = () => (
               <Route path="assignment" element={<AssignmentBoard />} />
               <Route path="inventory" element={<Inventory />} />
               <Route path="equipment" element={<Equipment />} />
+              <Route path="equipment/:id" element={<EquipmentDetail />} />
               <Route path="verify" element={<Dashboard />} />
               <Route path="reports" element={<Dashboard />} />
             </Route>

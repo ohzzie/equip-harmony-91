@@ -25,6 +25,7 @@ export interface WorkOrder {
   description: string;
   requester: string;
   requesterId: string;
+  assignedBy?: string; // Planner/coordinator who assigned
   assignees: string[];
   status: WorkOrderStatus;
   reportedAt: string;
@@ -53,23 +54,62 @@ export interface WorkOrder {
 export interface Equipment {
   id: string;
   name: string;
-  site: string;
+  
+  // SAHCO Fleet Management
+  fleetNumber?: string;  // e.g., "93/2"
+  equipmentType: string; // GPU, Belt Loader, Tug, etc.
+  
+  // Location
+  site: string; // Airport IATA code (LOS, ABV, PHC)
   area: string;
   line?: string;
+  
+  // Asset Details
   asset: string;
   component?: string;
   type: string;
   manufacturer?: string;
   model?: string;
   serialNumber?: string;
+  
+  // Purchase Information
+  dateOfPurchase?: string;
+  purchaseValue?: number;
+  purchaseCurrency?: 'NGN' | 'USD' | 'GBP' | 'EUR';
+  supplier?: string;
+  
+  // Status & Condition
   status: ServiceabilityStatus;
+  condition?: 'New' | 'Fair' | 'Old';
+  
+  // Ownership
+  assignedDepartment?: string; // Operations / Maintenance / Admin
+  currentCustodian?: string; // Responsible person/team
+  
+  // Maintenance
   specs?: Record<string, string>;
   pmCadence?: string;
   lastPM?: string;
   nextPM?: string;
+  
+  // Operating Hours
+  totalOperatingHours?: number;
+  
+  // Metrics
   mttr?: number;
   mttb?: number;
   historyCount: number;
+  
+  // Calculated from Work Orders
+  totalRepairs?: number;
+  totalMaintenanceCost?: number;
+  averageCostPerRepair?: number;
+  totalLaborHours?: number;
+  
+  // Audit
+  remarks?: string;
+  createdBy?: string;
+  createdDate?: string;
 }
 
 export interface Part {
@@ -113,4 +153,30 @@ export interface KPI {
   change?: number;
   trend?: 'up' | 'down' | 'neutral';
   icon?: string;
+}
+
+export interface EquipmentWorkHistory {
+  workOrderId: string;
+  type: WorkOrderType;
+  assignedBy: string; // Planner who assigned
+  assignedTo: string[]; // Technicians
+  startedAt: string;
+  completedAt?: string;
+  laborHours?: number;
+  partsCost?: number;
+  totalCost?: number;
+  status: WorkOrderStatus;
+}
+
+export interface EquipmentStats {
+  equipmentId: string;
+  totalWorkOrders: number;
+  completedWorkOrders: number;
+  totalCost: number;
+  averageCostPerRepair: number;
+  totalLaborHours: number;
+  averageLaborHoursPerRepair: number;
+  mostFrequentTechnician?: string;
+  mostFrequentAssigner?: string;
+  lastMaintenanceDate?: string;
 }
