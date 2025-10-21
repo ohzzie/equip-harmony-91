@@ -42,6 +42,7 @@ export interface WorkOrder {
   laborHours?: number;
   partsCost?: number;
   totalCost?: number;
+  partsUsed?: Array<{ partId: string; partName: string; quantity: number; unitCost: number }>;
   attachments: string[];
   photos: string[];
   notes: string[];

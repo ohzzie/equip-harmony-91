@@ -394,34 +394,82 @@ export default function WorkOrderDetail() {
 
           {/* Already Assigned Info */}
           {workOrder.status !== 'open' && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-success" />
-                  Assignment Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <Label>Assigned To</Label>
-                  <div className="space-y-1">
-                    {workOrder.assignees.map(assignee => (
-                      <p key={assignee} className="text-sm">{assignee}</p>
-                    ))}
-                  </div>
-                  {workOrder.failureCode && (
-                    <div className="mt-4">
-                      <Label>Codes</Label>
-                      <p className="text-sm">
-                        Failure: {workOrder.failureCode} • 
-                        Cause: {workOrder.causeCode} • 
-                        Remedy: {workOrder.remedyCode}
-                      </p>
+            <>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <CheckCircle2 className="h-5 w-5 text-success" />
+                    Assignment Details
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <Label>Assigned To</Label>
+                    <div className="space-y-1">
+                      {workOrder.assignees.map(assignee => (
+                        <p key={assignee} className="text-sm">{assignee}</p>
+                      ))}
                     </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+                    {workOrder.assignedBy && (
+                      <div className="mt-4">
+                        <Label>Assigned By</Label>
+                        <p className="text-sm">{workOrder.assignedBy}</p>
+                      </div>
+                    )}
+                    {workOrder.failureCode && (
+                      <div className="mt-4">
+                        <Label>Codes</Label>
+                        <p className="text-sm">
+                          Failure: {workOrder.failureCode} • 
+                          Cause: {workOrder.causeCode} • 
+                          Remedy: {workOrder.remedyCode}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Parts Used Section */}
+              {workOrder.partsUsed && workOrder.partsUsed.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Package className="h-5 w-5" />
+                      Parts & Consumables Used
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {workOrder.partsUsed.map((part, index) => (
+                        <div key={index} className="flex items-center justify-between rounded-lg border p-3">
+                          <div className="flex-1">
+                            <p className="font-medium">{part.partName}</p>
+                            <p className="text-sm text-muted-foreground">
+                              Quantity: {part.quantity}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-medium">
+                              ₦{(part.unitCost * part.quantity).toLocaleString()}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              @ ₦{part.unitCost.toLocaleString()} each
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                      <div className="border-t pt-3 flex justify-between items-center">
+                        <p className="font-semibold">Total Parts Cost</p>
+                        <p className="text-lg font-bold">
+                          ₦{workOrder.partsCost?.toLocaleString() || '0'}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </>
           )}
         </div>
 
@@ -457,12 +505,34 @@ export default function WorkOrderDetail() {
                     <div className="rounded-full border-2 border-primary p-1">
                       <div className="h-2 w-2 rounded-full" />
                     </div>
+                    {workOrder.completedAt && <div className="h-full w-px bg-border" />}
                   </div>
-                  <div>
+                  <div className={workOrder.completedAt ? "pb-4" : ""}>
                     <p className="font-medium">Due By</p>
                     <p className="text-sm text-muted-foreground">
                       {new Date(workOrder.dueBy).toLocaleString()}
                     </p>
+                  </div>
+                </div>
+              )}
+
+              {workOrder.completedAt && (
+                <div className="flex gap-3">
+                  <div className="flex flex-col items-center">
+                    <div className="rounded-full bg-success p-1">
+                      <CheckCircle2 className="h-3 w-3 text-success-foreground" />
+                    </div>
+                  </div>
+                  <div>
+                    <p className="font-medium text-success">Completed</p>
+                    <p className="text-sm text-muted-foreground">
+                      {new Date(workOrder.completedAt).toLocaleString()}
+                    </p>
+                    {workOrder.laborHours && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Labor: {workOrder.laborHours} hrs
+                      </p>
+                    )}
                   </div>
                 </div>
               )}

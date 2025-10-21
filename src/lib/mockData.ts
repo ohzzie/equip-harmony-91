@@ -42,6 +42,10 @@ export const MOCK_WORK_ORDERS: WorkOrder[] = [
     laborHours: 4.5,
     partsCost: 187000,
     totalCost: 187000,
+    partsUsed: [
+      { partId: 'PT-001', partName: 'Voltage Regulator - 400Hz', quantity: 1, unitCost: 175000 },
+      { partId: 'PT-002', partName: 'Electrical Wire Kit', quantity: 1, unitCost: 12000 }
+    ],
   },
   {
     id: 'WO-2025-00144',
@@ -74,6 +78,10 @@ export const MOCK_WORK_ORDERS: WorkOrder[] = [
     laborHours: 3.5,
     partsCost: 45000,
     totalCost: 45000,
+    partsUsed: [
+      { partId: 'PT-003', partName: 'Hydraulic Cylinder Seal Kit', quantity: 1, unitCost: 35000 },
+      { partId: 'PT-004', partName: 'Hydraulic Fluid - 5L', quantity: 2, unitCost: 5000 }
+    ],
   },
   {
     id: 'WO-2025-00143',
@@ -102,6 +110,10 @@ export const MOCK_WORK_ORDERS: WorkOrder[] = [
     laborHours: 2.5,
     partsCost: 28000,
     totalCost: 28000,
+    partsUsed: [
+      { partId: 'PT-005', partName: 'Engine Oil 15W-40 - 20L', quantity: 1, unitCost: 18000 },
+      { partId: 'PT-010', partName: 'Oil Filter', quantity: 2, unitCost: 5000 }
+    ],
   },
   {
     id: 'WO-2025-00142',
@@ -134,6 +146,9 @@ export const MOCK_WORK_ORDERS: WorkOrder[] = [
     laborHours: 4.5,
     partsCost: 320000,
     totalCost: 320000,
+    partsUsed: [
+      { partId: 'PT-011', partName: 'Hydraulic Pump Assembly', quantity: 1, unitCost: 320000 }
+    ],
   },
   {
     id: 'WO-2025-00141',
@@ -162,6 +177,11 @@ export const MOCK_WORK_ORDERS: WorkOrder[] = [
     laborHours: 3.0,
     partsCost: 42000,
     totalCost: 42000,
+    partsUsed: [
+      { partId: 'PT-005', partName: 'Engine Oil 15W-40 - 20L', quantity: 1, unitCost: 18000 },
+      { partId: 'PT-010', partName: 'Oil Filter', quantity: 2, unitCost: 5000 },
+      { partId: 'PT-012', partName: 'Air Filter', quantity: 2, unitCost: 7000 }
+    ],
   },
   {
     id: 'WO-2025-00140',
@@ -190,6 +210,9 @@ export const MOCK_WORK_ORDERS: WorkOrder[] = [
     laborHours: 1.5,
     partsCost: 5000,
     totalCost: 5000,
+    partsUsed: [
+      { partId: 'PT-013', partName: 'Multi-Purpose Grease - 1kg', quantity: 5, unitCost: 1000 }
+    ],
   },
   {
     id: 'WO-2025-00139',
@@ -221,6 +244,9 @@ export const MOCK_WORK_ORDERS: WorkOrder[] = [
     laborHours: 5.5,
     partsCost: 450000,
     totalCost: 450000,
+    partsUsed: [
+      { partId: 'PT-006', partName: 'Lead-Acid Battery 48V 400Ah', quantity: 1, unitCost: 450000 }
+    ],
   },
   {
     id: 'WO-2025-00138',
@@ -253,6 +279,10 @@ export const MOCK_WORK_ORDERS: WorkOrder[] = [
     laborHours: 8.0,
     partsCost: 285000,
     totalCost: 285000,
+    partsUsed: [
+      { partId: 'PT-007', partName: 'Radiator Assembly - Heavy Duty', quantity: 1, unitCost: 250000 },
+      { partId: 'PT-008', partName: 'Engine Coolant - 20L', quantity: 2, unitCost: 17500 }
+    ],
   },
   {
     id: 'WO-2025-00137',
@@ -311,6 +341,9 @@ export const MOCK_WORK_ORDERS: WorkOrder[] = [
     laborHours: 4.5,
     partsCost: 125000,
     totalCost: 125000,
+    partsUsed: [
+      { partId: 'PT-009', partName: 'Cable Reel Assembly', quantity: 1, unitCost: 125000 }
+    ],
   },
   // New open work orders
   {
