@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import WorkOrders from "./pages/WorkOrders";
 import WorkOrderDetail from "./pages/WorkOrderDetail";
+import WorkOrderExecution from "./pages/WorkOrderExecution";
 import NewWorkOrder from "./pages/NewWorkOrder";
 import AssignmentBoard from "./pages/AssignmentBoard";
 import Equipment from "./pages/Equipment";
@@ -44,6 +45,7 @@ const App = () => (
               <Route index element={<Dashboard />} />
               <Route path="work-orders" element={<WorkOrders />} />
               <Route path="work-orders/:id" element={<WorkOrderDetail />} />
+              <Route path="work-orders/:id/execute" element={<WorkOrderExecution />} />
               <Route path="work-orders/new" element={<NewWorkOrder />} />
               <Route path="assignment" element={<AssignmentBoard />} />
               <Route path="inventory" element={<Inventory />} />

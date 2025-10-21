@@ -135,20 +135,45 @@ export function OpsHome() {
           <CardContent>
             <div className="space-y-3">
               {toVerify.map(wo => (
-                <Link key={wo.id} to={`/verify/${wo.id}`}>
-                  <div className="flex items-center gap-4 rounded-lg border p-4 transition-colors hover:bg-muted/50">
-                    <div className="flex-1 space-y-1">
+                <Link key={wo.id} to={`/work-orders/${wo.id}`}>
+                  <div className="flex flex-col gap-2 rounded-lg border p-4 transition-colors hover:bg-muted/50">
+                    <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="font-medium">{wo.id}</span>
                         <StatusBadge status={wo.status} />
                         <StatusBadge status={wo.priority} />
                       </div>
-                      <p className="text-sm font-medium">{wo.title}</p>
-                      <p className="text-sm text-muted-foreground">{wo.equipmentName}</p>
-                    </div>
-                    <div className="text-right">
                       <Button size="sm" variant="outline">Review</Button>
                     </div>
+                    <p className="text-sm font-medium">{wo.title}</p>
+                    <p className="text-sm text-muted-foreground">{wo.equipmentName}</p>
+                    {wo.completedAt && (
+                      <div className="grid grid-cols-2 gap-2 text-xs pt-2 border-t">
+                        <div>
+                          <span className="text-muted-foreground">Completed: </span>
+                          <span className="font-medium">
+                            {new Date(wo.completedAt).toLocaleString([], { 
+                              month: 'short', 
+                              day: 'numeric', 
+                              hour: '2-digit', 
+                              minute: '2-digit' 
+                            })}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Labor: </span>
+                          <span className="font-medium">{wo.laborHours || 0}h</span>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Technician: </span>
+                          <span className="font-medium">{wo.assignees[0] || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Cost: </span>
+                          <span className="font-medium">₦{(wo.totalCost || 0).toLocaleString()}</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </Link>
               ))}

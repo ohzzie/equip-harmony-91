@@ -19,7 +19,8 @@ import {
   Clock,
   AlertTriangle,
   CheckCircle2,
-  Save
+  Save,
+  Play
 } from 'lucide-react';
 
 // Mock technicians - in production, fetch from database
@@ -148,6 +149,14 @@ export default function WorkOrderDetail() {
           </div>
         </div>
         <div className="flex gap-2">
+          {(workOrder.status === 'assigned' || workOrder.status === 'in_progress') && (
+            <Link to={`/work-orders/${workOrder.id}/execute`}>
+              <Button className="gap-2">
+                <Play className="h-4 w-4" />
+                Execute Work
+              </Button>
+            </Link>
+          )}
           <StatusBadge status={workOrder.status} />
           <StatusBadge status={workOrder.priority} />
         </div>
@@ -522,15 +531,37 @@ export default function WorkOrderDetail() {
                     <div className="rounded-full bg-success p-1">
                       <CheckCircle2 className="h-3 w-3 text-success-foreground" />
                     </div>
+                    {workOrder.verifiedAt && <div className="h-full w-px bg-border" />}
                   </div>
-                  <div>
-                    <p className="font-medium text-success">Completed</p>
+                  <div className={workOrder.verifiedAt ? "pb-4" : ""}>
+                    <p className="font-medium text-success">Completed by Technician</p>
                     <p className="text-sm text-muted-foreground">
                       {new Date(workOrder.completedAt).toLocaleString()}
                     </p>
                     {workOrder.laborHours && (
                       <p className="text-xs text-muted-foreground mt-1">
                         Labor: {workOrder.laborHours} hrs
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {workOrder.verifiedAt && (
+                <div className="flex gap-3">
+                  <div className="flex flex-col items-center">
+                    <div className="rounded-full bg-primary p-1">
+                      <CheckCircle2 className="h-3 w-3 text-primary-foreground" />
+                    </div>
+                  </div>
+                  <div>
+                    <p className="font-medium text-primary">Verified by Operations</p>
+                    <p className="text-sm text-muted-foreground">
+                      {new Date(workOrder.verifiedAt).toLocaleString()}
+                    </p>
+                    {workOrder.verificationStatus && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Status: {workOrder.verificationStatus.toUpperCase()}
                       </p>
                     )}
                   </div>

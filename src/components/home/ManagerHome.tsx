@@ -136,6 +136,74 @@ export function ManagerHome() {
         </Card>
       </div>
 
+      {/* Recent Completions with Timing */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Work Order Completions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {[
+              { 
+                id: 'WO-2025-00145', 
+                equipment: 'Belt Loader 93/2', 
+                completedAt: '2025-01-20 14:35',
+                verifiedAt: '2025-01-20 16:20',
+                laborHours: 3.5,
+                cost: 125000,
+                technician: 'Engr. Musa'
+              },
+              { 
+                id: 'WO-2025-00144', 
+                equipment: 'GPU TLD-420', 
+                completedAt: '2025-01-19 11:22',
+                verifiedAt: '2025-01-19 12:45',
+                laborHours: 2,
+                cost: 75000,
+                technician: 'Tech. Obi'
+              },
+              { 
+                id: 'WO-2025-00142', 
+                equipment: 'Baggage Tractor LOS-45', 
+                completedAt: '2025-01-18 09:15',
+                verifiedAt: '2025-01-18 10:30',
+                laborHours: 1.5,
+                cost: 48000,
+                technician: 'Engr. Ada'
+              },
+            ].map((wo) => (
+              <div key={wo.id} className="flex flex-col gap-2 rounded-lg border p-3">
+                <div className="flex items-center justify-between">
+                  <Link to={`/work-orders/${wo.id}`}>
+                    <p className="font-medium hover:text-primary">{wo.id}</p>
+                  </Link>
+                  <span className="text-xs text-muted-foreground">₦{wo.cost.toLocaleString()}</span>
+                </div>
+                <p className="text-sm text-muted-foreground">{wo.equipment}</p>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <span className="text-muted-foreground">Completed: </span>
+                    <span className="font-medium">{wo.completedAt}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Verified: </span>
+                    <span className="font-medium">{wo.verifiedAt}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Labor: </span>
+                    <span className="font-medium">{wo.laborHours}h</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">By: </span>
+                    <span className="font-medium">{wo.technician}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Asset Status */}
       <Card>
         <CardHeader>
