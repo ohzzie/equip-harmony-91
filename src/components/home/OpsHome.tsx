@@ -168,10 +168,6 @@ export function OpsHome() {
                           <span className="text-muted-foreground">Technician: </span>
                           <span className="font-medium">{wo.assignees[0] || 'N/A'}</span>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground">Cost: </span>
-                          <span className="font-medium">₦{(wo.totalCost || 0).toLocaleString()}</span>
-                        </div>
                       </div>
                     )}
                   </div>

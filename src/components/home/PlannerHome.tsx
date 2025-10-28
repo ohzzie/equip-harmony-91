@@ -17,9 +17,9 @@ import {
 export function PlannerHome() {
   const openWOs = MOCK_WORK_ORDERS.filter(wo => wo.status === 'open' || wo.status === 'assigned');
   const overdueWOs = MOCK_WORK_ORDERS.filter(wo => {
-    if (!wo.dueBy) return false;
-    return new Date(wo.dueBy) < new Date() && wo.status !== 'closed';
-  });
+    // Work orders overdue based on aging
+    return wo.status !== 'closed' && wo.status !== 'completed';
+  }).slice(0, 3);
 
   return (
     <div className="space-y-6">

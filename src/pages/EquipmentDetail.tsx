@@ -3,7 +3,8 @@ import { MOCK_EQUIPMENT, getEquipmentStats, getEquipmentWorkHistory } from '@/li
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { StatusBadge } from '@/components/StatusBadge';
-import { 
+import { useAuth } from '@/contexts/AuthContext';
+import {
   Table,
   TableBody,
   TableCell,
@@ -27,6 +28,9 @@ import {
 export default function EquipmentDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  
+  const isManager = user?.role === 'manager_maintenance' || user?.role === 'manager_asset';
   
   const equipment = MOCK_EQUIPMENT.find(eq => eq.id === id);
   const stats = equipment ? getEquipmentStats(equipment.id) : null;
@@ -192,7 +196,6 @@ export default function EquipmentDetail() {
                         <TableHead>Assigned By</TableHead>
                         <TableHead>Technicians</TableHead>
                         <TableHead className="text-right">Labor (hrs)</TableHead>
-                        <TableHead className="text-right">Cost</TableHead>
                         <TableHead>Status</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -220,9 +223,6 @@ export default function EquipmentDetail() {
                           <TableCell className="text-right">
                             {wo.laborHours?.toFixed(1) || '-'}
                           </TableCell>
-                          <TableCell className="text-right">
-                            {wo.totalCost ? formatCurrency(wo.totalCost) : '-'}
-                          </TableCell>
                           <TableCell>
                             <StatusBadge status={wo.status} />
                           </TableCell>
@@ -243,7 +243,8 @@ export default function EquipmentDetail() {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Purchase Information */}
-          <Card>
+          {isManager && (
+            <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <DollarSign className="h-5 w-5" />
@@ -272,12 +273,13 @@ export default function EquipmentDetail() {
                   <p className="text-xs text-muted-foreground">Supplier</p>
                   <p className="text-sm font-medium">{equipment.supplier}</p>
                 </div>
-              )}
-            </CardContent>
-          </Card>
+            )}
+          </CardContent>
+        </Card>
+        )}
 
-          {/* Maintenance Statistics */}
-          {stats && (
+        {/* Maintenance Statistics */}
+        {isManager && stats && (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">

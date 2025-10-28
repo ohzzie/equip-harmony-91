@@ -190,12 +190,6 @@ export default function AssignmentBoard() {
                             <span>Safety Required</span>
                           </div>
                         )}
-                        {wo.dueBy && (
-                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <Calendar className="h-3 w-3" />
-                            <span>Due: {new Date(wo.dueBy).toLocaleDateString()}</span>
-                          </div>
-                        )}
                       </div>
                     </div>
                   ))}

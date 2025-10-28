@@ -114,7 +114,7 @@ export default function Equipment() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Equipment</CardTitle>
@@ -136,17 +136,6 @@ export default function Equipment() {
           <CardContent>
             <div className="text-2xl font-bold">{formatCurrency(summaryStats.totalValue)}</div>
             <p className="text-xs text-muted-foreground">Total purchase value</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Maintenance Cost (YTD)</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(summaryStats.totalMaintenanceCost)}</div>
-            <p className="text-xs text-muted-foreground">All completed work orders</p>
           </CardContent>
         </Card>
 
@@ -210,17 +199,6 @@ export default function Equipment() {
                       <ArrowUpDown className="h-3 w-3" />
                     </Button>
                   </TableHead>
-                  <TableHead className="text-right">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="h-8 gap-1"
-                      onClick={() => toggleSort('cost')}
-                    >
-                      Avg Cost
-                      <ArrowUpDown className="h-3 w-3" />
-                    </Button>
-                  </TableHead>
                   <TableHead className="text-right">Labor Hrs</TableHead>
                   <TableHead>Last Technician</TableHead>
                   <TableHead>Assigned By</TableHead>
@@ -264,20 +242,6 @@ export default function Equipment() {
                       <div className="text-xs text-muted-foreground">
                         of {eq.stats.totalWorkOrders} total
                       </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {eq.stats.completedWorkOrders > 0 ? (
-                        <div>
-                          <div className="font-medium">
-                            {formatCurrency(eq.stats.averageCostPerRepair, eq.purchaseCurrency)}
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            Total: {formatCurrency(eq.stats.totalCost, eq.purchaseCurrency)}
-                          </div>
-                        </div>
-                      ) : (
-                        <span className="text-muted-foreground">-</span>
-                      )}
                     </TableCell>
                     <TableCell className="text-right">
                       {eq.stats.totalLaborHours > 0 ? (

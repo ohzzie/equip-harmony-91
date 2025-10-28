@@ -37,8 +37,8 @@ const workOrderSchema = z.object({
   description: z.string()
     .min(10, 'Description must be at least 10 characters')
     .max(2000, 'Description must be less than 2000 characters'),
-  dueBy: z.string().optional(),
   safetyTags: z.array(z.string()).optional(),
+  attachments: z.array(z.string()).optional(),
 });
 
 type WorkOrderFormValues = z.infer<typeof workOrderSchema>;
@@ -57,6 +57,7 @@ export default function NewWorkOrder() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [selectedSafetyTags, setSelectedSafetyTags] = useState<string[]>([]);
+  const [attachments, setAttachments] = useState<File[]>([]);
 
   const form = useForm<WorkOrderFormValues>({
     resolver: zodResolver(workOrderSchema),
@@ -66,8 +67,8 @@ export default function NewWorkOrder() {
       priority: 'medium',
       title: '',
       description: '',
-      dueBy: '',
       safetyTags: [],
+      attachments: [],
     },
   });
 
@@ -75,15 +76,31 @@ export default function NewWorkOrder() {
     eq => eq.id === form.watch('equipmentId')
   );
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setAttachments([...attachments, ...files]);
+    toast({
+      description: `${files.length} file(s) attached`,
+    });
+  };
+
+  const removeAttachment = (index: number) => {
+    setAttachments(attachments.filter((_, i) => i !== index));
+  };
+
   const onSubmit = (data: WorkOrderFormValues) => {
-    // Add safety tags to form data
-    const formData = { ...data, safetyTags: selectedSafetyTags };
+    // Add safety tags and attachments to form data
+    const formData = { 
+      ...data, 
+      safetyTags: selectedSafetyTags,
+      attachments: attachments.map(f => f.name)
+    };
     
     console.log('New Work Order:', formData);
     
     toast({
       title: 'Work Order Created',
-      description: `${formData.title} has been created successfully.`,
+      description: `${formData.title} has been created successfully with ${attachments.length} attachment(s).`,
     });
 
     // Navigate back to work orders list
@@ -238,26 +255,56 @@ export default function NewWorkOrder() {
                     )}
                   />
 
-                  {/* Due Date */}
-                  <FormField
-                    control={form.control}
-                    name="dueBy"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Due Date</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="datetime-local"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Optional: Set a deadline for completion
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                </CardContent>
+              </Card>
+
+              {/* Attachments */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Attachments & Evidence</CardTitle>
+                  <CardDescription>
+                    Upload photos, documents, or other evidence related to this work order
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="attachments">Upload Files</Label>
+                    <Input
+                      id="attachments"
+                      type="file"
+                      multiple
+                      onChange={handleFileChange}
+                      className="cursor-pointer"
+                      accept="image/*,.pdf,.doc,.docx"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Supported: Images, PDF, Word documents
+                    </p>
+                  </div>
+
+                  {attachments.length > 0 && (
+                    <div className="space-y-2">
+                      <Label>Attached Files ({attachments.length})</Label>
+                      {attachments.map((file, index) => (
+                        <div key={index} className="flex items-center justify-between rounded-lg border p-3">
+                          <div className="flex-1 truncate">
+                            <p className="text-sm font-medium truncate">{file.name}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {(file.size / 1024).toFixed(1)} KB
+                            </p>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeAttachment(index)}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 

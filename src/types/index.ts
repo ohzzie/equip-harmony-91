@@ -34,7 +34,6 @@ export interface WorkOrder {
   completedAt?: string;
   verifiedAt?: string;
   closedAt?: string;
-  dueBy?: string;
   failureCode?: string;
   causeCode?: string;
   remedyCode?: string;

@@ -118,13 +118,6 @@ export function TechnicianHome() {
                     <p className="text-sm font-medium">{job.title}</p>
                     <p className="text-sm text-muted-foreground">{job.equipmentName}</p>
                   </div>
-                  <div className="text-right text-sm">
-                    {job.dueBy && (
-                      <p className="text-muted-foreground">
-                        Due: {new Date(job.dueBy).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </p>
-                    )}
-                  </div>
                 </div>
               </Link>
             ))}

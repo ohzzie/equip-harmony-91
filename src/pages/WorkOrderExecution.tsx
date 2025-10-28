@@ -284,7 +284,7 @@ export default function WorkOrderExecution() {
               <SelectContent>
                 {MOCK_PARTS.map(part => (
                   <SelectItem key={part.id} value={part.id}>
-                    {part.name} - ₦{part.unitCost.toLocaleString()}
+                    {part.name}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -298,7 +298,7 @@ export default function WorkOrderExecution() {
                   <div className="flex-1">
                     <p className="font-medium">{part.partName}</p>
                     <p className="text-sm text-muted-foreground">
-                      Qty: {part.quantity} × ₦{part.unitCost.toLocaleString()} = ₦{(part.quantity * part.unitCost).toLocaleString()}
+                      Qty: {part.quantity}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -324,10 +324,6 @@ export default function WorkOrderExecution() {
                   </div>
                 </div>
               ))}
-              <div className="flex justify-between border-t pt-2 font-medium">
-                <span>Total Parts Cost:</span>
-                <span>₦{totalPartsCost.toLocaleString()}</span>
-              </div>
             </div>
           ) : (
             <p className="text-center text-sm text-muted-foreground py-4">
@@ -404,7 +400,6 @@ export default function WorkOrderExecution() {
               <p>This will mark the work order as completed and send it for verification.</p>
               <div className="mt-4 space-y-1 text-sm">
                 <p><strong>Labor Hours:</strong> {(elapsedTime / 3600).toFixed(2)} hours</p>
-                <p><strong>Parts Cost:</strong> ₦{totalPartsCost.toLocaleString()}</p>
                 <p><strong>Photos:</strong> {photos.length} attached</p>
                 <p><strong>Notes:</strong> {notes ? 'Added' : 'None'}</p>
               </div>

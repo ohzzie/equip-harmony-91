@@ -37,6 +37,9 @@ export default function WorkOrderDetail() {
   const { toast } = useToast();
   const { user } = useAuth();
   
+  const isManager = user?.role === 'manager_maintenance' || user?.role === 'manager_asset';
+  const isOperations = user?.role === 'ops_staff' || user?.role === 'ops_rep';
+  
   const workOrder = MOCK_WORK_ORDERS.find(wo => wo.id === id);
   const equipment = MOCK_EQUIPMENT.find(e => e.id === workOrder?.equipmentId);
 
@@ -360,7 +363,7 @@ export default function WorkOrderDetail() {
                           <div>
                             <p className="font-medium">{part.name}</p>
                             <p className="text-sm text-muted-foreground">
-                              Qty: {quantity} {part.uom} • Cost: ${(part.unitCost * quantity).toFixed(2)}
+                              Qty: {quantity} {part.uom}
                             </p>
                           </div>
                           <Button
@@ -458,22 +461,26 @@ export default function WorkOrderDetail() {
                               Quantity: {part.quantity}
                             </p>
                           </div>
-                          <div className="text-right">
-                            <p className="font-medium">
-                              ₦{(part.unitCost * part.quantity).toLocaleString()}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              @ ₦{part.unitCost.toLocaleString()} each
-                            </p>
-                          </div>
+                          {isManager && (
+                            <div className="text-right">
+                              <p className="font-medium">
+                                ₦{(part.unitCost * part.quantity).toLocaleString()}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                @ ₦{part.unitCost.toLocaleString()} each
+                              </p>
+                            </div>
+                          )}
                         </div>
                       ))}
-                      <div className="border-t pt-3 flex justify-between items-center">
-                        <p className="font-semibold">Total Parts Cost</p>
-                        <p className="text-lg font-bold">
-                          ₦{workOrder.partsCost?.toLocaleString() || '0'}
-                        </p>
-                      </div>
+                      {isManager && (
+                        <div className="border-t pt-3 flex justify-between items-center">
+                          <p className="font-semibold">Total Parts Cost</p>
+                          <p className="text-lg font-bold">
+                            ₦{workOrder.partsCost?.toLocaleString() || '0'}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -507,23 +514,6 @@ export default function WorkOrderDetail() {
                   </p>
                 </div>
               </div>
-
-              {workOrder.dueBy && (
-                <div className="flex gap-3">
-                  <div className="flex flex-col items-center">
-                    <div className="rounded-full border-2 border-primary p-1">
-                      <div className="h-2 w-2 rounded-full" />
-                    </div>
-                    {workOrder.completedAt && <div className="h-full w-px bg-border" />}
-                  </div>
-                  <div className={workOrder.completedAt ? "pb-4" : ""}>
-                    <p className="font-medium">Due By</p>
-                    <p className="text-sm text-muted-foreground">
-                      {new Date(workOrder.dueBy).toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-              )}
 
               {workOrder.completedAt && (
                 <div className="flex gap-3">

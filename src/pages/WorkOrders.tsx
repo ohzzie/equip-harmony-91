@@ -56,15 +56,6 @@ export default function WorkOrders() {
                   <span>{wo.equipmentName}</span>
                   <span>•</span>
                   <span>{wo.site} - {wo.area}</span>
-                  {wo.dueBy && (
-                    <>
-                      <span>•</span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        Due: {new Date(wo.dueBy).toLocaleDateString()}
-                      </span>
-                    </>
-                  )}
                 </div>
               </div>
               <Button variant="outline" size="sm">View</Button>
