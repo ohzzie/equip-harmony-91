@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { MOCK_WORK_ORDERS, MOCK_PARTS } from '@/lib/mockData';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,19 +25,23 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
   ArrowLeft,
-  Play,
-  Pause,
-  Clock,
   Camera,
   Package,
-  Plus,
   Trash2,
   Save,
   CheckCircle2,
+  Send,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
 
 interface PartUsed {
   partId: string;
@@ -46,29 +50,26 @@ interface PartUsed {
   unitCost: number;
 }
 
+interface PartRequest {
+  partId: string;
+  partName: string;
+  quantity: number;
+  reason: string;
+}
+
 export default function WorkOrderExecution() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
   const workOrder = MOCK_WORK_ORDERS.find(wo => wo.id === id);
 
-  const [timerRunning, setTimerRunning] = useState(false);
-  const [elapsedTime, setElapsedTime] = useState(0); // in seconds
   const [partsUsed, setPartsUsed] = useState<PartUsed[]>([]);
   const [notes, setNotes] = useState('');
   const [photos, setPhotos] = useState<string[]>([]);
   const [showCompleteDialog, setShowCompleteDialog] = useState(false);
-
-  // Timer effect
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (timerRunning) {
-      interval = setInterval(() => {
-        setElapsedTime(prev => prev + 1);
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [timerRunning]);
+  const [showRequestDialog, setShowRequestDialog] = useState(false);
+  const [partRequests, setPartRequests] = useState<PartRequest[]>([]);
+  const [requestReason, setRequestReason] = useState('');
 
   if (!workOrder) {
     return (
@@ -77,24 +78,6 @@ export default function WorkOrderExecution() {
       </div>
     );
   }
-
-  const formatTime = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  const handleStartStop = () => {
-    if (!timerRunning && workOrder.status === 'assigned') {
-      // Auto-update status to in_progress when starting timer
-      toast({
-        title: 'Work Started',
-        description: 'Timer started and work order status updated to In Progress',
-      });
-    }
-    setTimerRunning(!timerRunning);
-  };
 
   const handleAddPart = (partId: string) => {
     const part = MOCK_PARTS.find(p => p.id === partId);
@@ -124,6 +107,58 @@ export default function WorkOrderExecution() {
     setPartsUsed(partsUsed.filter(p => p.partId !== partId));
   };
 
+  const handleRequestPart = (partId: string) => {
+    const part = MOCK_PARTS.find(p => p.id === partId);
+    if (!part) return;
+
+    const existing = partRequests.find(p => p.partId === partId);
+    if (existing) {
+      setPartRequests(partRequests.map(p =>
+        p.partId === partId ? { ...p, quantity: p.quantity + 1 } : p
+      ));
+    } else {
+      setPartRequests([...partRequests, {
+        partId: part.id,
+        partName: part.name,
+        quantity: 1,
+        reason: '',
+      }]);
+    }
+  };
+
+  const handleRemovePartRequest = (partId: string) => {
+    setPartRequests(partRequests.filter(p => p.partId !== partId));
+  };
+
+  const handleSubmitPartRequest = () => {
+    if (partRequests.length === 0) {
+      toast({
+        title: 'No Parts Selected',
+        description: 'Please add parts to the request',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const hasEmptyReason = partRequests.some(p => !p.reason.trim());
+    if (hasEmptyReason) {
+      toast({
+        title: 'Missing Information',
+        description: 'Please provide a reason for each part request',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    toast({
+      title: 'Part Request Submitted',
+      description: 'Your request has been sent to the inventory manager for approval',
+    });
+    setShowRequestDialog(false);
+    setPartRequests([]);
+    setRequestReason('');
+  };
+
   const handlePhotoCapture = () => {
     // In real implementation, this would open camera
     const photoUrl = `photo-${Date.now()}.jpg`;
@@ -142,15 +177,6 @@ export default function WorkOrderExecution() {
   };
 
   const handleComplete = () => {
-    if (timerRunning) {
-      toast({
-        title: 'Stop Timer First',
-        description: 'Please stop the timer before completing the work order',
-        variant: 'destructive',
-      });
-      return;
-    }
-
     if (partsUsed.length === 0) {
       toast({
         title: 'No Parts Logged',
@@ -188,53 +214,8 @@ export default function WorkOrderExecution() {
           <h1 className="text-2xl font-bold">{workOrder.id}</h1>
           <p className="text-muted-foreground">{workOrder.title}</p>
         </div>
-        <StatusBadge status={workOrder.status} />
         <StatusBadge status={workOrder.priority} />
       </div>
-
-      {/* Timer Card */}
-      <Card className={cn(
-        "border-2",
-        timerRunning && "border-accent bg-accent/5"
-      )}>
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className={cn(
-                "flex h-16 w-16 items-center justify-center rounded-full",
-                timerRunning ? "bg-accent animate-pulse" : "bg-muted"
-              )}>
-                <Clock className="h-8 w-8" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Time Elapsed</p>
-                <p className="text-3xl font-mono font-bold">{formatTime(elapsedTime)}</p>
-                <p className="text-xs text-muted-foreground">
-                  Labor Hours: {(elapsedTime / 3600).toFixed(2)}
-                </p>
-              </div>
-            </div>
-            <Button
-              size="lg"
-              onClick={handleStartStop}
-              className="gap-2"
-              variant={timerRunning ? "outline" : "default"}
-            >
-              {timerRunning ? (
-                <>
-                  <Pause className="h-5 w-5" />
-                  Pause Timer
-                </>
-              ) : (
-                <>
-                  <Play className="h-5 w-5" />
-                  Start Timer
-                </>
-              )}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Equipment Info */}
       <Card>
@@ -270,10 +251,16 @@ export default function WorkOrderExecution() {
       {/* Parts Used */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Package className="h-5 w-5" />
-            Parts & Consumables Used
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <Package className="h-5 w-5" />
+              Parts & Consumables Used
+            </CardTitle>
+            <Button onClick={() => setShowRequestDialog(true)} variant="outline" size="sm" className="gap-2">
+              <Send className="h-4 w-4" />
+              Request Parts
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex gap-2">
@@ -399,7 +386,7 @@ export default function WorkOrderExecution() {
             <AlertDialogDescription className="space-y-2">
               <p>This will mark the work order as completed and send it for verification.</p>
               <div className="mt-4 space-y-1 text-sm">
-                <p><strong>Labor Hours:</strong> {(elapsedTime / 3600).toFixed(2)} hours</p>
+                <p><strong>Parts Used:</strong> {partsUsed.length} items</p>
                 <p><strong>Photos:</strong> {photos.length} attached</p>
                 <p><strong>Notes:</strong> {notes ? 'Added' : 'None'}</p>
               </div>
@@ -413,6 +400,94 @@ export default function WorkOrderExecution() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Part Request Dialog */}
+      <Dialog open={showRequestDialog} onOpenChange={setShowRequestDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Request Parts</DialogTitle>
+            <DialogDescription>
+              Request additional parts needed for this work order
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Select Part</Label>
+              <Select onValueChange={handleRequestPart}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select part to request..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {MOCK_PARTS.map(part => (
+                    <SelectItem key={part.id} value={part.id}>
+                      {part.name} (Available: {part.onHand - part.reserved})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {partRequests.length > 0 && (
+              <div className="space-y-2">
+                <Label>Requested Parts</Label>
+                {partRequests.map(part => (
+                  <div key={part.partId} className="border rounded-lg p-3 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium">{part.partName}</p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Label className="text-xs">Quantity:</Label>
+                          <Input
+                            type="number"
+                            min="1"
+                            value={part.quantity}
+                            onChange={(e) => {
+                              const qty = parseInt(e.target.value) || 1;
+                              setPartRequests(partRequests.map(p =>
+                                p.partId === part.partId ? { ...p, quantity: qty } : p
+                              ));
+                            }}
+                            className="w-20 h-8"
+                          />
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleRemovePartRequest(part.partId)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <div>
+                      <Label className="text-xs">Reason *</Label>
+                      <Textarea
+                        placeholder="Why is this part needed?"
+                        value={part.reason}
+                        onChange={(e) => {
+                          setPartRequests(partRequests.map(p =>
+                            p.partId === part.partId ? { ...p, reason: e.target.value } : p
+                          ));
+                        }}
+                        className="mt-1"
+                        rows={2}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowRequestDialog(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSubmitPartRequest}>
+              Submit Request
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

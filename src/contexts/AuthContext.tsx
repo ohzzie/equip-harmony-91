@@ -10,6 +10,7 @@ export type UserRole =
   | 'manager_asset'
   | 'manager_maintenance'
   | 'stores'
+  | 'inventory_manager'
   | 'reliability'
   | 'admin';
 
@@ -62,6 +63,13 @@ const MOCK_USERS: Record<string, User> = {
     name: 'Lisa Anderson',
     email: 'manager@emms.com',
     role: 'manager_maintenance',
+    site: 'Site A',
+  },
+  'inventory@emms.com': {
+    id: 'user-005',
+    name: 'David Wilson',
+    email: 'inventory@emms.com',
+    role: 'inventory_manager',
     site: 'Site A',
   },
 };

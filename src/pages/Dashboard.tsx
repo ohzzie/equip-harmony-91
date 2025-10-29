@@ -3,6 +3,7 @@ import { TechnicianHome } from '@/components/home/TechnicianHome';
 import { PlannerHome } from '@/components/home/PlannerHome';
 import { OpsHome } from '@/components/home/OpsHome';
 import { ManagerHome } from '@/components/home/ManagerHome';
+import { InventoryManagerHome } from '@/components/home/InventoryManagerHome';
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -21,6 +22,9 @@ export default function Dashboard() {
     case 'ops_staff':
     case 'ops_rep':
       return <OpsHome />;
+    
+    case 'inventory_manager':
+      return <InventoryManagerHome />;
     
     case 'manager_asset':
     case 'manager_maintenance':

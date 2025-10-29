@@ -12,9 +12,12 @@ import WorkOrderDetail from "./pages/WorkOrderDetail";
 import WorkOrderExecution from "./pages/WorkOrderExecution";
 import NewWorkOrder from "./pages/NewWorkOrder";
 import AssignmentBoard from "./pages/AssignmentBoard";
+import AssignmentHistory from "./pages/AssignmentHistory";
 import Equipment from "./pages/Equipment";
 import EquipmentDetail from "./pages/EquipmentDetail";
 import Inventory from "./pages/Inventory";
+import PartRequests from "./pages/PartRequests";
+import StaffList from "./pages/StaffList";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,9 +51,12 @@ const App = () => (
               <Route path="work-orders/:id/execute" element={<WorkOrderExecution />} />
               <Route path="work-orders/new" element={<NewWorkOrder />} />
               <Route path="assignment" element={<AssignmentBoard />} />
+              <Route path="assignment-history" element={<AssignmentHistory />} />
               <Route path="inventory" element={<Inventory />} />
+              <Route path="part-requests" element={<PartRequests />} />
               <Route path="equipment" element={<Equipment />} />
               <Route path="equipment/:id" element={<EquipmentDetail />} />
+              <Route path="staff" element={<StaffList />} />
               <Route path="verify" element={<Dashboard />} />
               <Route path="reports" element={<Dashboard />} />
             </Route>

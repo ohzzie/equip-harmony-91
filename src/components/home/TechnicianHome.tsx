@@ -19,9 +19,8 @@ import { cn } from '@/lib/utils';
 export function TechnicianHome() {
   const myJobs = MOCK_WORK_ORDERS.filter(wo => 
     wo.status === 'in_progress' || wo.status === 'assigned'
-  ).slice(0, 4);
-
-  const runningJob = MOCK_WORK_ORDERS.find(wo => wo.status === 'in_progress');
+  ).sort((a, b) => new Date(b.stateEnteredAt).getTime() - new Date(a.stateEnteredAt).getTime())
+  .slice(0, 4);
 
   return (
     <div className="space-y-6">
@@ -30,27 +29,6 @@ export function TechnicianHome() {
         <h1 className="text-3xl font-bold tracking-tight">My Jobs</h1>
         <p className="text-muted-foreground">Field execution and work order management</p>
       </div>
-
-      {/* Running Timer Alert */}
-      {runningJob && (
-        <Card className="border-accent bg-accent/5">
-          <CardContent className="flex items-center justify-between p-6">
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent">
-                <Clock className="h-6 w-6 text-accent-foreground" />
-              </div>
-              <div>
-                <p className="font-medium">Timer Running</p>
-                <p className="text-sm text-muted-foreground">{runningJob.id} - 45 minutes</p>
-              </div>
-            </div>
-            <Button variant="outline" size="sm" className="gap-2">
-              <Pause className="h-4 w-4" />
-              Pause
-            </Button>
-          </CardContent>
-        </Card>
-      )}
 
       {/* KPI Cards */}
       <div className="grid gap-4 md:grid-cols-4">
