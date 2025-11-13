@@ -85,19 +85,29 @@ export function TechnicianHome() {
         <CardContent>
           <div className="space-y-3">
             {myJobs.map(job => (
-              <Link key={job.id} to={`/work-orders/${job.id}`}>
-                <div className="flex items-center gap-4 rounded-lg border p-4 transition-colors hover:bg-muted/50">
-                  <div className="flex-1 space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium">{job.id}</span>
-                      <StatusBadge status={job.status} />
-                      <StatusBadge status={job.priority} />
-                    </div>
-                    <p className="text-sm font-medium">{job.title}</p>
-                    <p className="text-sm text-muted-foreground">{job.equipmentName}</p>
+              <div key={job.id} className="flex items-center gap-4 rounded-lg border p-4 transition-colors hover:bg-muted/50">
+                <Link to={`/work-orders/${job.id}`} className="flex-1 space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">{job.id}</span>
+                    <StatusBadge status={job.status} />
+                    <StatusBadge status={job.priority} />
                   </div>
-                </div>
-              </Link>
+                  <p className="text-sm font-medium">{job.title}</p>
+                  <p className="text-sm text-muted-foreground">{job.equipmentName}</p>
+                </Link>
+                {job.status === 'assigned' && (
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      // In production, this would update the work order status via API
+                      console.log('Starting work order:', job.id);
+                    }}
+                  >
+                    <Play className="h-4 w-4 mr-2" />
+                    Start Work
+                  </Button>
+                )}
+              </div>
             ))}
           </div>
         </CardContent>
