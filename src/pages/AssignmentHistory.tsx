@@ -54,117 +54,68 @@ export default function AssignmentHistory() {
       </Card>
 
       {/* History Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
+      <div className="border rounded-lg overflow-hidden bg-background">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Work Order</TableHead>
+              <TableHead>Title</TableHead>
+              <TableHead>Equipment</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Priority</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Assigned To</TableHead>
+              <TableHead>Assigned By</TableHead>
+              <TableHead>Date Assigned</TableHead>
+              <TableHead>Scheduled</TableHead>
+              <TableHead>Started</TableHead>
+              <TableHead>Completed</TableHead>
+              <TableHead>Labor Hours</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredOrders.length === 0 ? (
               <TableRow>
-                <TableHead>Work Order</TableHead>
-                <TableHead>Title</TableHead>
-                <TableHead>Equipment</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Priority</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Assigned To</TableHead>
-                <TableHead>Assigned By</TableHead>
-                <TableHead>Date Assigned</TableHead>
-                <TableHead>Scheduled</TableHead>
-                <TableHead>Started</TableHead>
-                <TableHead>Completed</TableHead>
-                <TableHead>Labor Hours</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableCell colSpan={14} className="text-center py-8">
+                  No assignment history found
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredOrders.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={14} className="text-center py-12 text-muted-foreground">
-                    No assignment history found
+            ) : (
+              filteredOrders.map((wo) => (
+                <TableRow key={wo.id}>
+                  <TableCell>{wo.id}</TableCell>
+                  <TableCell>{wo.title}</TableCell>
+                  <TableCell>{wo.equipmentName}</TableCell>
+                  <TableCell>{wo.type}</TableCell>
+                  <TableCell>{wo.priority}</TableCell>
+                  <TableCell>{wo.status}</TableCell>
+                  <TableCell>{wo.assignees.join(', ')}</TableCell>
+                  <TableCell>{wo.assignedBy || 'N/A'}</TableCell>
+                  <TableCell>
+                    {new Date(wo.stateEnteredAt).toLocaleDateString()} {new Date(wo.stateEnteredAt).toLocaleTimeString()}
+                  </TableCell>
+                  <TableCell>
+                    {wo.scheduledAt ? new Date(wo.scheduledAt).toLocaleDateString() : '-'}
+                  </TableCell>
+                  <TableCell>
+                    {wo.startedAt ? `${new Date(wo.startedAt).toLocaleDateString()} ${new Date(wo.startedAt).toLocaleTimeString()}` : '-'}
+                  </TableCell>
+                  <TableCell>
+                    {wo.completedAt ? `${new Date(wo.completedAt).toLocaleDateString()} ${new Date(wo.completedAt).toLocaleTimeString()}` : '-'}
+                  </TableCell>
+                  <TableCell>{wo.laborHours || '-'}</TableCell>
+                  <TableCell>
+                    <Link to={`/work-orders/${wo.id}`} className="text-primary hover:underline">
+                      View
+                    </Link>
                   </TableCell>
                 </TableRow>
-              ) : (
-                filteredOrders.map((wo) => (
-                  <TableRow key={wo.id}>
-                    <TableCell className="font-medium">{wo.id}</TableCell>
-                    <TableCell>{wo.title}</TableCell>
-                    <TableCell>{wo.equipmentName}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{wo.type}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          wo.priority === 'critical'
-                            ? 'destructive'
-                            : wo.priority === 'high'
-                            ? 'default'
-                            : 'secondary'
-                        }
-                      >
-                        {wo.priority}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <StatusBadge status={wo.status} />
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-wrap gap-1">
-                        {wo.assignees.map((assignee, index) => (
-                          <Badge key={index} variant="secondary" className="text-xs">
-                            {assignee}
-                          </Badge>
-                        ))}
-                      </div>
-                    </TableCell>
-                    <TableCell>{wo.assignedBy || 'N/A'}</TableCell>
-                    <TableCell className="text-sm">
-                      {new Date(wo.stateEnteredAt).toLocaleDateString()}<br />
-                      <span className="text-muted-foreground text-xs">
-                        {new Date(wo.stateEnteredAt).toLocaleTimeString()}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      {wo.scheduledAt
-                        ? new Date(wo.scheduledAt).toLocaleDateString()
-                        : '-'}
-                    </TableCell>
-                    <TableCell>
-                      {wo.startedAt ? (
-                        <div className="text-sm">
-                          {new Date(wo.startedAt).toLocaleDateString()}<br />
-                          <span className="text-muted-foreground text-xs">
-                            {new Date(wo.startedAt).toLocaleTimeString()}
-                          </span>
-                        </div>
-                      ) : (
-                        '-'
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {wo.completedAt ? (
-                        <div className="text-sm">
-                          {new Date(wo.completedAt).toLocaleDateString()}<br />
-                          <span className="text-muted-foreground text-xs">
-                            {new Date(wo.completedAt).toLocaleTimeString()}
-                          </span>
-                        </div>
-                      ) : (
-                        '-'
-                      )}
-                    </TableCell>
-                    <TableCell>{wo.laborHours || '-'}</TableCell>
-                    <TableCell className="text-right">
-                      <Button asChild size="sm" variant="outline">
-                        <Link to={`/work-orders/${wo.id}`}>View</Link>
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
