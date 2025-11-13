@@ -30,7 +30,7 @@ export default function EquipmentDetail() {
   const navigate = useNavigate();
   const { user } = useAuth();
   
-  const isManager = user?.role === 'manager_maintenance' || user?.role === 'manager_asset';
+  const isManager = true;
   
   const equipment = MOCK_EQUIPMENT.find(eq => eq.id === id);
   const stats = equipment ? getEquipmentStats(equipment.id) : null;

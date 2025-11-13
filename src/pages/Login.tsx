@@ -81,10 +81,7 @@ export default function Login() {
             <div className="mt-6 space-y-2 rounded-lg bg-muted/50 p-4 text-xs">
               <p className="font-medium text-muted-foreground">Demo Credentials:</p>
               <div className="space-y-1 font-mono">
-                <p>Technician: tech@emms.com</p>
-                <p>Planner: planner@emms.com</p>
-                <p>Ops Rep: ops@emms.com</p>
-                <p>Manager: manager@emms.com</p>
+                <p>Email: user@emms.com</p>
               </div>
               <p className="text-muted-foreground">Password: any</p>
             </div>

@@ -28,14 +28,14 @@ import {
 const NAV_ITEMS = [
   { icon: Home, label: 'Home', path: '/' },
   { icon: ClipboardList, label: 'Work Orders', path: '/work-orders' },
-  { icon: LayoutGrid, label: 'Assignment', path: '/assignment', roles: ['planner', 'coordinator', 'manager_maintenance', 'admin'] },
-  { icon: History, label: 'Assignment History', path: '/assignment-history', roles: ['planner', 'coordinator', 'manager_maintenance', 'admin'] },
+  { icon: LayoutGrid, label: 'Assignment', path: '/assignment' },
+  { icon: History, label: 'Assignment History', path: '/assignment-history' },
   { icon: Package, label: 'Inventory', path: '/inventory' },
-  { icon: Layers, label: 'Part Requests', path: '/part-requests', roles: ['inventory_manager', 'admin'] },
+  { icon: Layers, label: 'Part Requests', path: '/part-requests' },
   { icon: Wrench, label: 'Equipment', path: '/equipment' },
-  { icon: CheckCircle, label: 'Verify', path: '/verify', roles: ['ops_rep', 'manager_maintenance', 'admin'] },
-  { icon: Users, label: 'Staff', path: '/staff', roles: ['manager_asset', 'manager_maintenance', 'reliability', 'admin'] },
-  { icon: BarChart3, label: 'Reports', path: '/reports', roles: ['manager_asset', 'manager_maintenance', 'reliability', 'admin'] },
+  { icon: CheckCircle, label: 'Verify', path: '/verify' },
+  { icon: Users, label: 'Staff', path: '/staff' },
+  { icon: BarChart3, label: 'Reports', path: '/reports' },
 ];
 
 export function AppSidebar() {
@@ -43,9 +43,7 @@ export function AppSidebar() {
   const { open } = useSidebar();
   const location = useLocation();
 
-  const filteredNavItems = NAV_ITEMS.filter(
-    item => !item.roles || item.roles.includes(user?.role || '')
-  );
+  const filteredNavItems = NAV_ITEMS;
 
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';

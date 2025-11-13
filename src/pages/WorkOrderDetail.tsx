@@ -37,8 +37,8 @@ export default function WorkOrderDetail() {
   const { toast } = useToast();
   const { user } = useAuth();
   
-  const isManager = user?.role === 'manager_maintenance' || user?.role === 'manager_asset';
-  const isOperations = user?.role === 'ops_staff' || user?.role === 'ops_rep';
+  const isManager = true;
+  const isOperations = false;
   
   const workOrder = MOCK_WORK_ORDERS.find(wo => wo.id === id);
   const equipment = MOCK_EQUIPMENT.find(e => e.id === workOrder?.equipmentId);
@@ -69,7 +69,7 @@ export default function WorkOrderDetail() {
     );
   }
 
-  const canEdit = user?.role === 'planner' || user?.role === 'coordinator' || user?.role === 'manager_asset' || user?.role === 'manager_maintenance';
+  const canEdit = true;
   const isUnassigned = workOrder.status === 'open';
 
   const toggleTechnician = (techId: string) => {

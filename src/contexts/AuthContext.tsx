@@ -1,18 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type UserRole = 
-  | 'technician'
-  | 'engineer'
-  | 'planner'
-  | 'coordinator'
-  | 'ops_staff'
-  | 'ops_rep'
-  | 'manager_asset'
-  | 'manager_maintenance'
-  | 'stores'
-  | 'inventory_manager'
-  | 'reliability'
-  | 'admin';
+export type UserRole = 'user';
 
 export interface User {
   id: string;
@@ -35,42 +23,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Mock users for demo
 const MOCK_USERS: Record<string, User> = {
-  'tech@emms.com': {
+  'user@emms.com': {
     id: 'user-001',
     name: 'John Smith',
-    email: 'tech@emms.com',
-    role: 'technician',
+    email: 'user@emms.com',
+    role: 'user',
     site: 'Site A',
     skills: ['Electrical', 'Mechanical', 'HVAC'],
     certifications: ['LOTO', 'Confined Space']
-  },
-  'planner@emms.com': {
-    id: 'user-002',
-    name: 'Sarah Johnson',
-    email: 'planner@emms.com',
-    role: 'planner',
-    site: 'Site A',
-  },
-  'ops@emms.com': {
-    id: 'user-003',
-    name: 'Mike Davis',
-    email: 'ops@emms.com',
-    role: 'ops_rep',
-    site: 'Site A',
-  },
-  'manager@emms.com': {
-    id: 'user-004',
-    name: 'Lisa Anderson',
-    email: 'manager@emms.com',
-    role: 'manager_maintenance',
-    site: 'Site A',
-  },
-  'inventory@emms.com': {
-    id: 'user-005',
-    name: 'David Wilson',
-    email: 'inventory@emms.com',
-    role: 'inventory_manager',
-    site: 'Site A',
   },
 };
 
