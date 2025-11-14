@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import {
@@ -7,22 +6,29 @@ import {
   Wrench,
   Pin,
   LogOut,
-  ChevronDown,
-  ChevronUp,
+  ClipboardList,
+  Package,
+  ShoppingCart,
+  Users,
+  History,
 } from 'lucide-react';
 import sahcoLogo from '@/assets/sahco-logo.png';
 
-const HOME_SUBMENU = [
-  { label: 'Operations', path: '/operations' },
-  { label: 'Planning & Assignment', path: '/assignment' },
-  { label: 'Technician', path: '/technician' },
+const MENU_ITEMS = [
+  { label: 'Dashboard', path: '/', icon: LayoutGrid },
+  { label: 'Work Orders', path: '/work-orders', icon: FileText },
+  { label: 'Equipment', path: '/equipment', icon: Wrench },
+  { label: 'Assignment Board', path: '/assignment', icon: ClipboardList },
+  { label: 'Inventory', path: '/inventory', icon: Package },
+  { label: 'Part Requests', path: '/part-requests', icon: ShoppingCart },
+  { label: 'Staff List', path: '/staff', icon: Users },
+  { label: 'Assignment History', path: '/assignment-history', icon: History },
 ];
 
 export function AppSidebar() {
   const { logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const [homeExpanded, setHomeExpanded] = useState(true);
 
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
@@ -53,75 +59,23 @@ export function AppSidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 py-6 px-4 space-y-2">
-        {/* Home with submenu */}
-        <div>
-          <button
-            onClick={() => setHomeExpanded(!homeExpanded)}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-              isActive('/') && location.pathname === '/'
-                ? 'bg-primary text-white'
-                : 'text-white/90 hover:bg-white/5'
-            }`}
+      <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
+        {MENU_ITEMS.map((item) => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                isActive
+                  ? 'bg-primary text-white'
+                  : 'text-white/90 hover:bg-white/5'
+              }`
+            }
           >
-            <LayoutGrid className="h-5 w-5 text-primary" />
-            <span className="flex-1 text-left font-medium">Home</span>
-            {homeExpanded ? (
-              <ChevronUp className="h-4 w-4" />
-            ) : (
-              <ChevronDown className="h-4 w-4" />
-            )}
-          </button>
-          {homeExpanded && (
-            <div className="ml-12 mt-1 space-y-1">
-              {HOME_SUBMENU.map((item) => (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  className={({ isActive }) =>
-                    `block px-4 py-2 text-sm rounded-lg transition-colors ${
-                      isActive
-                        ? 'text-white font-medium'
-                        : 'text-white/70 hover:text-white hover:bg-white/5'
-                    }`
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Work Order */}
-        <NavLink
-          to="/work-orders"
-          className={({ isActive }) =>
-            `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-              isActive
-                ? 'bg-primary text-white'
-                : 'text-white/90 hover:bg-white/5'
-            }`
-          }
-        >
-          <FileText className="h-5 w-5" />
-          <span className="font-medium">Work Order</span>
-        </NavLink>
-
-        {/* Equipment */}
-        <NavLink
-          to="/equipment"
-          className={({ isActive }) =>
-            `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-              isActive
-                ? 'bg-primary text-white'
-                : 'text-white/90 hover:bg-white/5'
-            }`
-          }
-        >
-          <Wrench className="h-5 w-5" />
-          <span className="font-medium">Equipment</span>
-        </NavLink>
+            <item.icon className="h-5 w-5" />
+            <span className="font-medium">{item.label}</span>
+          </NavLink>
+        ))}
       </nav>
 
       {/* Logout */}
