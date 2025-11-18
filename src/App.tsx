@@ -18,6 +18,7 @@ import EquipmentDetail from "./pages/EquipmentDetail";
 import Inventory from "./pages/Inventory";
 import PartRequests from "./pages/PartRequests";
 import StaffList from "./pages/StaffList";
+import TechnicianWorkOrders from "./pages/TechnicianWorkOrders";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -57,6 +58,7 @@ const App = () => (
               <Route path="equipment" element={<Equipment />} />
               <Route path="equipment/:id" element={<EquipmentDetail />} />
               <Route path="staff" element={<StaffList />} />
+              <Route path="tech" element={<TechnicianWorkOrders />} />
               <Route path="verify" element={<Dashboard />} />
               <Route path="reports" element={<Dashboard />} />
             </Route>

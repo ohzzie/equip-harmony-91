@@ -11,6 +11,7 @@ import {
   ShoppingCart,
   Users,
   History,
+  Briefcase,
 } from 'lucide-react';
 import sahcoLogo from '@/assets/sahco-logo.png';
 
@@ -23,6 +24,7 @@ const MENU_ITEMS = [
   { label: 'Part Requests', path: '/part-requests', icon: ShoppingCart },
   { label: 'Staff List', path: '/staff', icon: Users },
   { label: 'Assignment History', path: '/assignment-history', icon: History },
+  { label: 'Tech', path: '/tech', icon: Briefcase },
 ];
 
 export function AppSidebar() {
